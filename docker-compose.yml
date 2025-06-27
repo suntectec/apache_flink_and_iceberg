@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   mariadb:
-    image: mariadb:10.6.14
+    image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
     volumes:
@@ -12,44 +12,46 @@ services:
       - "3306:3306"
 
   jobmanager:
-    image: flink:1.18.0
+    image: flink:1.20
     container_name: jobmanager
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
-      - AWS_ACCESS_KEY_ID=
-      - AWS_SECRET_ACCESS_KEY=
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
     ports:
       - "8081:8081"
     command: jobmanager
     volumes:
-      - ./jars/flink-sql-connector-mysql-cdc-2.4.1.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-2.4.1.jar
-      - ./jars/flink-connector-jdbc-3.1.0-1.17.jar:/opt/flink/lib/flink-connector-jdbc-3.1.0-1.17.jar
-      - ./jars/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar:/opt/flink/lib/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
-      - ./jars/flink-s3-fs-hadoop-1.17.1.jar:/opt/flink/lib/flink-s3-fs-hadoop-1.17.1.jar
-      - ./jars/iceberg-flink-runtime-1.17-1.4.2.jar:/opt/flink/lib/iceberg-flink-runtime-1.17-1.4.2.jar
-      - ./jars/hadoop-mapreduce-client-core-3.3.4.jar:/opt/flink/lib/hadoop-mapreduce-client-core-3-3.4.jar
-      - ./jars/hadoop-hdfs-client-3.2.1.jar:/opt/flink/lib/hadoop-hdfs-client-3.2.1.jar
+      - ./jars/flink-connector-jdbc-3.3.0-1.20.jar:/opt/flink/lib/flink-connector-jdbc-3.3.0-1.20.jar
+      - ./jars/flink-s3-fs-hadoop-1.20.1.jar:/opt/flink/lib/flink-s3-fs-hadoop-1.20.1.jar
+      - ./jars/flink-shaded-hadoop-3-3.1.1.7.2.9.0-173-9.0.jar:/opt/flink/lib/flink-shaded-hadoop-3-3.1.1.7.2.9.0-173-9.0.jar
+      - ./jars/flink-sql-connector-mysql-cdc-3.4.0.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-3.4.0.jar
+      - ./jars/iceberg-flink-runtime-1.20-1.9.1.jar:/opt/flink/lib/iceberg-flink-runtime-1.20-1.9.1.jar
       - ./jars/hadoop-aws-3.3.4.jar:/opt/flink/lib/hadoop-aws-3.3.4.jar
+      - ./jars/hadoop-hdfs-client-3.2.1.jar:/opt/flink/lib/hadoop-hdfs-client-3.2.1.jar
+      - ./jars/hadoop-mapreduce-client-core-3.3.4.jar:/opt/flink/lib/hadoop-mapreduce-client-core-3-3.4.jar
       - ./jobs/job.sql:/opt/flink/job.sql
+      - ./jars/iceberg-aws-bundle-1.9.1.jar:/opt/flink/lib/iceberg-aws-bundle-1.9.1.jar
     deploy:
           replicas: 1
   taskmanager:
-    image: flink:1.18.0
+    image: flink:1.20
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
-      - AWS_ACCESS_KEY_ID=
-      - AWS_SECRET_ACCESS_KEY=
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
     depends_on:
       - jobmanager
     command: taskmanager
     volumes:
-      - ./jars/flink-sql-connector-mysql-cdc-2.4.1.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-2.4.1.jar
-      - ./jars/flink-connector-jdbc-3.1.0-1.17.jar:/opt/flink/lib/flink-connector-jdbc-3.1.0-1.17.jar
-      - ./jars/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar:/opt/flink/lib/flink-shaded-hadoop-2-uber-2.8.3-10.0.jar
-      - ./jars/flink-s3-fs-hadoop-1.17.1.jar:/opt/flink/lib/flink-s3-fs-hadoop-1.17.1.jar
-      - ./jars/iceberg-flink-runtime-1.17-1.4.2.jar:/opt/flink/lib/iceberg-flink-runtime-1.17-1.4.2.jar
-      - ./jars/hadoop-mapreduce-client-core-3.3.4.jar:/opt/flink/lib/hadoop-mapreduce-client-core-3-3.4.jar
-      - ./jars/hadoop-hdfs-client-3.2.1.jar:/opt/flink/lib/hadoop-hdfs-client-3.2.1.jar
+      - ./jars/flink-connector-jdbc-3.3.0-1.20.jar:/opt/flink/lib/flink-connector-jdbc-3.3.0-1.20.jar
+      - ./jars/flink-s3-fs-hadoop-1.20.1.jar:/opt/flink/lib/flink-s3-fs-hadoop-1.20.1.jar
+      - ./jars/flink-shaded-hadoop-3-3.1.1.7.2.9.0-173-9.0.jar:/opt/flink/lib/flink-shaded-hadoop-3-3.1.1.7.2.9.0-173-9.0.jar
+      - ./jars/flink-sql-connector-mysql-cdc-3.4.0.jar:/opt/flink/lib/flink-sql-connector-mysql-cdc-3.4.0.jar
+      - ./jars/iceberg-flink-runtime-1.20-1.9.1.jar:/opt/flink/lib/iceberg-flink-runtime-1.20-1.9.1.jar
       - ./jars/hadoop-aws-3.3.4.jar:/opt/flink/lib/hadoop-aws-3.3.4.jar
+      - ./jars/hadoop-hdfs-client-3.2.1.jar:/opt/flink/lib/hadoop-hdfs-client-3.2.1.jar
+      - ./jars/hadoop-mapreduce-client-core-3.3.4.jar:/opt/flink/lib/hadoop-mapreduce-client-core-3-3.4.jar
+      - ./jars/iceberg-aws-bundle-1.9.1.jar:/opt/flink/lib/iceberg-aws-bundle-1.9.1.jar
     deploy:
           replicas: 2

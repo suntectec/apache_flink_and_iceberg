@@ -1,10 +1,15 @@
 USE CATALOG default_catalog;
 
 CREATE CATALOG s3_catalog WITH (
-    'type' = 'iceberg',
-    'catalog-type' = 'hadoop',
-    'warehouse' = 's3a://my-test-bucket/iceberg',
-    'property-version' = '1'
+    'type'='iceberg',
+    'catalog-impl'='org.apache.iceberg.aws.glue.GlueCatalog',
+    'warehouse' = 's3://lakehouse/iceberg',
+    'io-impl'='org.apache.iceberg.aws.s3.S3FileIO',
+    'property-version' = '1',
+    's3.endpoint'='http://192.168.138.15:9000',
+    's3.access-key' = 'minioadmin',
+    's3.secret-key' = 'minioadmin',
+    'client.region'='us-east-1'
 );
 
 USE CATALOG s3_catalog;
