@@ -11,7 +11,13 @@ docker compose up -d
 Once the containers are running, submit the job to Flink using:
 
 ```
-docker exec -it jobmanager /opt/flink/bin/sql-client.sh embedded -f /opt/flink/job.sql
+docker exec -it jobmanager bin/sql-client.sh embedded -f /opt/flink/jobs/job.sql
+```
+
+Enter Flink SQL Cli:
+
+```
+docker exec -it jobmanager bin/sql-client.sh embedded shell
 ```
 
 If you open your browser to `http://localhost:8081` you'll see the Flink UI with your job running, saving the data from the database to s3 using the Iceberg format
